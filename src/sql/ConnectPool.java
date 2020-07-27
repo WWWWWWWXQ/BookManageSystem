@@ -81,9 +81,7 @@ public class ConnectPool {
 		private final String URL = "jdbc:mysql://127.0.0.1:3306/BookLibrary?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false";
 		private final String USER = "root";
 		private final String PASS = "wuxiaoqi889900";
-		/*private final String URL = "jdbc:mysql://172.81.253.56:3306/book?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false";
-		private final String USER = "student";
-		private final String PASS = "123456";*/
+
 		Connection conn = null;
 
 		public Connection getConnection() {
