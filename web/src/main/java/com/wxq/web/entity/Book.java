@@ -103,7 +103,7 @@ public class Book {
 	@Override
 	public boolean equals(Object book1) {
 		if(book1 instanceof Book) {
-			Book book=(Book)book1;
+			Book book =(Book)book1;
 		    if(this.bookName.equals(book.getBookName())
 					&&this.author.equals(book.getAuthor())
 					&&this.publishHouse.equals(book.getPublishHouse())) {

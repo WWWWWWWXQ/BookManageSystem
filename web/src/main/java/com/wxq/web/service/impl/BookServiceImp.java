@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.wxq.web.dao.BookDao;
+import com.wxq.web.dao.po.BookDao;
 import com.wxq.web.entity.Book;
 import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.entity.User;
@@ -17,7 +17,7 @@ import com.wxq.web.exception.UserMaxBorrowedException;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.exception.UserOweFeeException;
 import com.wxq.web.service.BookService;
-import com.wxq.web.sql.ConnectPool;
+
 
 /**
  * 逻辑处理层
@@ -25,6 +25,19 @@ import com.wxq.web.sql.ConnectPool;
 public class BookServiceImp implements BookService {
 	private BookDao bookDao;
 	private ConnectPool connectPool = new ConnectPool();
+
+	class ConnectPool{
+		public Connection getConnection() {
+			return null;
+		}
+
+		public void releaseConnection(Connection conn) {
+		}
+
+		public Connection getTransactionConnection() {
+			return null;
+		}
+	}
 
 	public BookServiceImp(BookDao bookDao) {
 		this.bookDao = bookDao;
@@ -91,7 +104,7 @@ public class BookServiceImp implements BookService {
 		try {
 			conn = connectPool.getTransactionConnection();
 			return bookDao.getBorrowRecordByUserId(conn, bookDao.getUserIdByName(conn,userName));
-		} catch (UserNotFoundException | SQLException | SQLUpdateException userNotFoundException) {
+		} catch (UserNotFoundException  | SQLUpdateException userNotFoundException) {
 			Logger.getGlobal().info(userNotFoundException.getMessage());
 		}
 		return null;
@@ -299,7 +312,7 @@ public class BookServiceImp implements BookService {
 	public boolean isInitialized(List<Book> books, Book book) {
 		Connection conn = connectPool.getConnection();
 		if (books.contains(book)){
-			System.out.println("「"+book+"」已经录入了");
+			System.out.println("「"+ book +"」已经录入了");
 			return false;
 		}
 		connectPool.releaseConnection(conn);
@@ -343,7 +356,7 @@ public class BookServiceImp implements BookService {
 	public synchronized boolean addBook(Book book) {
 		Connection conn = connectPool.getConnection();
 		try {
-			if (bookDao.insertBook(conn,book)){
+			if (bookDao.insertBook(conn, book)){
 				System.out.println("《" + book.getBookName()+"》录入成功");
 			}else {
 
