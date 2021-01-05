@@ -1,10 +1,11 @@
 package com.wxq.web.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.wxq.web.dao.BookDao;
+import com.wxq.web.dao.po.BookDao;
 import com.wxq.web.entity.Book;
 import com.wxq.web.entity.User;
 import com.wxq.web.exception.UserNotFoundException;
@@ -42,7 +43,7 @@ public class BookManager {
 	/**
 	 * 静态方法，用于初始化图书馆
 	 */
-	private final static List<Book> books = Arrays.asList(
+	private final static List<Book> BOOK_DTOS = Arrays.asList(
 			new Book(1,"Core Java VolumeI","Cay S. Horstmann", "人民邮电出版社"),
 			new Book(2,"Spring实战","Craig Walls", "人民邮电出版社"),
 			new Book(3,"深入理解Java虚拟机","周志明", "机械工业出版社"),
@@ -54,7 +55,7 @@ public class BookManager {
 			new Book(9,"习近平新时代中国特色社会主义思想学习纲领","中共中央宣传部","人民出版社")
 	);
 
-	private final static List<Book> booksOfMine = Arrays.asList(
+	private final static List<Book> BOOKS_OF_MINE = Arrays.asList(
 			new Book(1,"论如何在世界边缘无限徘徊", "吴肖琪", "532激情出版社" )
 
 	);
@@ -81,13 +82,15 @@ public class BookManager {
 
 	public void addBookList(){
 		LinkedList<Book> bookInTable = bookService.getAllBooks();
-		for (Book book : booksOfMine){
+		for (Book book : BOOKS_OF_MINE){
 			if (bookInTable.contains(book)){
 				System.out.println("「" + book + "」已经录入了");
 				continue;
 			}
 			bookService.addBook(book);
 		}
+		LocalDateTime localDateTime = LocalDateTime.now();
+		localDateTime.toString();
 	}
 
 	/**
@@ -200,7 +203,7 @@ public class BookManager {
 	 * 显示当前图书馆里所记录的所有图书
 	 */
 	public synchronized void displayAllBooks() {
-		LinkedList<Book> books=bookService.getAllBooks();
+		LinkedList<Book> books =bookService.getAllBooks();
 		if (books.size()==0)
 			System.out.println("还没有书呢");
 		else{
@@ -282,7 +285,7 @@ public class BookManager {
 	public boolean addBook(Book book) {
 		LinkedList<Book> bookInTable = bookService.getAllBooks();
 		if (bookInTable.contains(book)){
-			System.out.println("「"+book+"」已经录入了");
+			System.out.println("「"+ book +"」已经录入了");
 			return false;
 		}
 		bookService.addBook(book);

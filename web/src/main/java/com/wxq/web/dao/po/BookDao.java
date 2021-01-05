@@ -1,4 +1,4 @@
-package com.wxq.web.dao;
+package com.wxq.web.dao.po;
 
 import java.sql.*;
 import java.time.Duration;
@@ -43,10 +43,10 @@ public class BookDao {
         String sql = "insert into book (book_name, author, publish_house, is_instore) values(?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1,book.getBookName());
-            pstmt.setString(2,book.getAuthor());
-            pstmt.setString(3,book.getPublishHouse());
-            pstmt.setInt(4,book.isInStore() ? 1 : 0);
+            pstmt.setString(1, book.getBookName());
+            pstmt.setString(2, book.getAuthor());
+            pstmt.setString(3, book.getPublishHouse());
+            pstmt.setInt(4, book.isInStore() ? 1 : 0);
             if (pstmt.executeUpdate()!=0) {
                 return true ;
             }else {
