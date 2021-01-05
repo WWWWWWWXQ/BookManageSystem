@@ -6,6 +6,7 @@ import com.wxq.web.constant.ConstantValue;
  * 主要改的一个是User的构造函数 默认在注册的时候 没必要制定借书数 应该默认为0
  */
 public class User {
+
 	private String userName;
 	//用户类型 学生为stu，教师为tea
 	private String type;
