@@ -1,4 +1,4 @@
-package com.wxq.web.constant;
+package com.wxq.common.constant;
 
 public class ConstantValue {
 public final static int STUBOOKNUM=6;

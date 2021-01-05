@@ -1,6 +1,6 @@
 package com.wxq.web.entity;
 
-import com.wxq.web.constant.ConstantValue;
+import com.wxq.common.constant.ConstantValue;
 import lombok.Data;
 
 /**
