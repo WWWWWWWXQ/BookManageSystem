@@ -1,4 +1,8 @@
 package com.wxq.web.dao;
 
-public class BookRepository {
+import com.wxq.web.dao.po.Book;
+import org.springframework.data.repository.CrudRepository;
+
+public interface BookRepository extends CrudRepository<Book, Long> {
+
 }
