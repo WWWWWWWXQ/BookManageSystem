@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.wxq.web.dao.po.BookDao;
 import com.wxq.web.entity.Book;
-import com.wxq.web.entity.User;
+import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.exception.UserNotLoginException;
 import com.wxq.web.service.BookService;
@@ -64,7 +64,7 @@ public class BookManager {
 	 * 私有构造函数，用于单例模式
 	 */
 	private BookManager() {
-		bookService = new BookServiceImp(new BookDao());
+
 	}
 
 	/**
@@ -78,6 +78,7 @@ public class BookManager {
 			}
 			return bookManager;
 		}
+
 	}
 
 	public void addBookList(){

@@ -2,7 +2,7 @@ package com.wxq.web.service.impl;
 
 import com.wxq.web.entity.Book;
 import com.wxq.web.entity.BorrowRecord;
-import com.wxq.web.entity.User;
+import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.BookService;
 import lombok.extern.slf4j.Slf4j;
@@ -81,6 +81,7 @@ public class DefaultBookService implements BookService {
 
     @Override
     public String getUserTypeByName(String userName) {
+
         return null;
     }
 

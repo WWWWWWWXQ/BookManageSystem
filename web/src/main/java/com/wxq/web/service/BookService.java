@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.wxq.web.entity.Book;
 import com.wxq.web.entity.BorrowRecord;
-import com.wxq.web.entity.User;
+import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 
 public interface BookService {
