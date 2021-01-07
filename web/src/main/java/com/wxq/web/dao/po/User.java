@@ -11,9 +11,6 @@ import javax.persistence.Entity;
 
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@RequiredArgsConstructor
 public class User extends BasePO{
 
     private String userName;
