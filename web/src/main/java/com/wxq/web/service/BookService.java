@@ -3,16 +3,15 @@ package com.wxq.web.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.wxq.web.entity.Book;
-import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.dao.po.User;
+import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.exception.UserNotFoundException;
 
 public interface BookService {
 
-	boolean returnBook(User user, String bookId);
+	boolean returnBook(User userDTO, String bookId);
 
- 	boolean borrowBook(User user, String bookId);
+ 	boolean borrowBook(User userDTO, String bookId);
 
 	List<Book> getBooksByBookName(String bookName);
 	
@@ -26,9 +25,9 @@ public interface BookService {
 
 	User getUserByName(String userName)throws UserNotFoundException;
 
-	boolean addUser(User user);
+	boolean addUser(User userDTO);
 	
-	boolean payBookCost(User user);
+	boolean payBookCost(User userDTO);
 
 	boolean isInitialized(List<Book> books, Book book);
 

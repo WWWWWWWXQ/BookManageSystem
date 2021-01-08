@@ -17,9 +17,10 @@ public class User extends BasePO{
     //用户类型 学生为stu，教师为tea
     private String role;
     //当前借阅数量（未还）
-    private int bookNum;
+    private int borrowNum;
     //欠费总额
     private double costAmount;
 
     private String gender;
+
 }

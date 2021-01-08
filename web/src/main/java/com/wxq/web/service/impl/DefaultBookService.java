@@ -1,8 +1,7 @@
 package com.wxq.web.service.impl;
 
-import com.wxq.web.entity.Book;
-import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.dao.po.User;
+import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.BookService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +14,12 @@ import java.util.List;
 @Service
 public class DefaultBookService implements BookService {
     @Override
-    public boolean returnBook(User user, String bookId) {
+    public boolean returnBook(User userDTO, String bookId) {
         return false;
     }
 
     @Override
-    public boolean borrowBook(User user, String bookId) {
+    public boolean borrowBook(User userDTO, String bookId) {
         return false;
     }
 
@@ -55,12 +54,12 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(User userDTO) {
         return false;
     }
 
     @Override
-    public boolean payBookCost(User user) {
+    public boolean payBookCost(User userDTO) {
         return false;
     }
 

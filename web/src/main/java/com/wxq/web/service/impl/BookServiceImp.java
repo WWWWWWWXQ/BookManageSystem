@@ -6,17 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.wxq.web.dao.po.BookDao;
-import com.wxq.web.entity.Book;
+import com.wxq.web.dao.BookDao;
 import com.wxq.web.entity.BorrowRecord;
-import com.wxq.web.entity.User;
 import com.wxq.web.exception.BookNotFoundException;
 import com.wxq.web.exception.BookNotInstoreException;
 import com.wxq.web.exception.SQLUpdateException;
 import com.wxq.web.exception.UserMaxBorrowedException;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.exception.UserOweFeeException;
-import com.wxq.web.service.BookService;
 
 
 /**
