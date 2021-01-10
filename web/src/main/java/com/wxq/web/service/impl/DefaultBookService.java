@@ -1,9 +1,10 @@
 package com.wxq.web.service.impl;
 
 import com.wxq.web.dao.po.User;
-import com.wxq.web.entity.BorrowRecord;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.BookService;
+import com.wxq.web.service.dto.BookDTO;
+import com.wxq.web.service.dto.BorrowRecordDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class DefaultBookService implements BookService {
+
     @Override
     public boolean returnBook(User userDTO, String bookId) {
         return false;
@@ -24,7 +26,7 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public List<Book> getBooksByBookName(String bookName) {
+    public List<BookDTO> getBooksByBookName(String bookName) {
         return null;
     }
 
@@ -34,17 +36,17 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public boolean addBook(Book book) {
+    public boolean addBook(BookDTO book) {
         return false;
     }
 
     @Override
-    public boolean addBooks(List<Book> list) {
+    public boolean addBooks(List<BookDTO> list) {
         return false;
     }
 
     @Override
-    public List<BorrowRecord> getBorrowRecordByName(String userName) {
+    public List<BorrowRecordDTO> getBorrowRecordByName(String userName) {
         return null;
     }
 
@@ -64,12 +66,12 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public boolean isInitialized(List<Book> books, Book book) {
+    public boolean isInitialized(List<BookDTO> books, BookDTO book) {
         return false;
     }
 
     @Override
-    public LinkedList<Book> getAllBooks() {
+    public LinkedList<BookDTO> getAllBooks() {
         return null;
     }
 
@@ -80,7 +82,6 @@ public class DefaultBookService implements BookService {
 
     @Override
     public String getUserTypeByName(String userName) {
-
         return null;
     }
 
