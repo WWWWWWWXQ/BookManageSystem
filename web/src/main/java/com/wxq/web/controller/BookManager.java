@@ -5,13 +5,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.wxq.web.dao.po.BookDao;
-import com.wxq.web.entity.Book;
-import com.wxq.web.entity.User;
+import com.wxq.web.service.dto.UserDTO;
 import com.wxq.web.exception.UserNotFoundException;
-import com.wxq.web.exception.UserNotLoginException;
 import com.wxq.web.service.BookService;
-import com.wxq.web.service.impl.BookServiceImp;
 
 /**
  * 图书管理请求处理层，通过调用BookService提供的功能进行高层抽象管理
@@ -32,12 +28,12 @@ public class BookManager {
 
 
 	/**
-	 * 登陆的用户对象保存在此Map中。本类中所有的操作所需User对象均从此Map获取
+	 * 登陆的用户对象保存在此Map中。本类中所有的操作所需UserDTO对象均从此Map获取
 	 * 但其实在实现的时候没有注意到这一点 虽然操作上并无大碍
 	 */
-	private volatile Map<String, User> currentUsers = new HashMap<>();
+	private volatile Map<String, UserDTO> currentUserDTOs = new HashMap<>();
 
-	//private ConcurrentHashMap<String, User> concurrentHashMap = new ConcurrentHashMap<>();
+	//private ConcurrentHashMap<String, UserDTO> concurrentHashMap = new ConcurrentHashMap<>();
 
 
 	/**
@@ -64,7 +60,7 @@ public class BookManager {
 	 * 私有构造函数，用于单例模式
 	 */
 	private BookManager() {
-		bookService = new BookServiceImp(new BookDao());
+
 	}
 
 	/**
@@ -78,6 +74,7 @@ public class BookManager {
 			}
 			return bookManager;
 		}
+
 	}
 
 	public void addBookList(){
@@ -110,17 +107,17 @@ public class BookManager {
 
 	/**
 	 * 登陆函数，接收给出的用户名，实现用户的登陆操作
-	 * {@code currentUsers} 用于判断用户是否登陆
-	 * 调用 {@code bookService.getUserByName()} 函数进行业务逻辑层的实现
-	 * @param userName
+	 * {@code currentUserDTOs} 用于判断用户是否登陆
+	 * 调用 {@code bookService.getUserDTOByName()} 函数进行业务逻辑层的实现
+	 * @param UserDTOName
 	 * @return boolean
 	 * @throws UserNotFoundException
 	 */
-	public boolean loginUser(String userName) throws UserNotFoundException {
-		if (!currentUsers.containsKey(userName)) {
-			currentUsers.put(userName, bookService.getUserByName(userName));
+	public boolean loginUserDTO(String UserDTOName) throws UserNotFoundException {
+		if (!currentUserDTOs.containsKey(UserDTOName)) {
+			currentUserDTOs.put(UserDTOName, bookService.getUserByName(UserDTOName));
 			System.out.println("登陆中...");
-			System.out.println(HEADSTAR + userName + " 登陆成功"+TAILSTAR);
+			System.out.println(HEADSTAR + UserDTOName + " 登陆成功"+TAILSTAR);
 			return true;
 		} else {
 			System.out.println("您已登陆，无需再次登陆");
@@ -129,74 +126,74 @@ public class BookManager {
 	}
 
 	/**
-	 * 用户登出 直接从 {@code currentUsers}中删除对应的KV对就行
-	 * @param userName
+	 * 用户登出 直接从 {@code currentUserDTOs}中删除对应的KV对就行
+	 * @param UserDTOName
 	 */
-	public void logoutUser(String userName) {
-		System.out.println( HEADSTAR + userName + " 退出系统" + TAILSTAR );
-		currentUsers.remove(userName);
+	public void logoutUserDTO(String UserDTOName) {
+		System.out.println( HEADSTAR + UserDTOName + " 退出系统" + TAILSTAR );
+		currentUserDTOs.remove(UserDTOName);
 	}
 
 	/**
 	 * 用过给出的用户名新建一个用户
-	 * @param user
+	 * @param UserDTODTO
 	 * @return
 	 */
-	public boolean registeUser(User user)  {
-		return bookService.addUser(user);
+	public boolean registeUserDTO(UserDTO UserDTODTO)  {
+		return bookService.addUserDTO(UserDTODTO);
 	}
 
 	/**
-	 * 从currentUsers中获取登陆用户，用于执行该用户相关操作
-	 * @param userName
-	 * @return User
-	 * @throws UserNotLoginException
+	 * 从currentUserDTOs中获取登陆用户，用于执行该用户相关操作
+	 * @param UserDTOName
+	 * @return UserDTO
+	 * @throws UserDTONotLoginException
 	 */
-	public synchronized User getCurrentUser(String userName) throws UserNotLoginException {
-		User user = currentUsers.get(userName);
-		if (user == null) {
-			throw new UserNotLoginException();
+	public synchronized UserDTO getCurrentUserDTO(String UserDTOName) throws UserDTONotLoginException {
+		UserDTO UserDTODTO = currentUserDTOs.get(UserDTOName);
+		if (UserDTODTO == null) {
+			throw new UserDTONotLoginException();
 		} else
-			return user;
+			return UserDTODTO;
 	}
 
 
 	/**
 	 * 处理借书请求，{@code synchronized}关键词用于调用对象自身的内部锁
 	 * 但是没时间写多线程了 所以自动调用wait和notifyAll会多少拖慢运行的速度的
-	 * @param userName
+	 * @param UserDTOName
 	 * @param bookId
 	 * @return
-	 * @throws UserNotLoginException
+	 * @throws UserDTONotLoginException
 	 */
-	public synchronized boolean borrowBook(String userName, String bookId) throws UserNotLoginException {
-		User user = getCurrentUser(userName);
-		return bookService.borrowBook(user, bookId);
+	public synchronized boolean borrowBook(String UserDTOName, String bookId) throws UserDTONotLoginException {
+		UserDTO UserDTODTO = getCurrentUserDTO(UserDTOName);
+		return bookService.borrowBook(UserDTODTO, bookId);
 	}
 
 	/**
 	 * 处理还书请求，大致和借书一样
-	 * @param userName
+	 * @param UserDTOName
 	 * @param bookId
 	 * @return
-	 * @throws UserNotLoginException
+	 * @throws UserDTONotLoginException
 	 */
-	public synchronized boolean returnBook(String userName, String bookId) throws UserNotLoginException {
-		User user = getCurrentUser(userName);
-		return bookService.returnBook(user, bookId);
+	public synchronized boolean returnBook(String UserDTOName, String bookId) throws UserDTONotLoginException {
+		UserDTO UserDTODTO = getCurrentUserDTO(UserDTOName);
+		return bookService.returnBook(UserDTODTO, bookId);
 
 	}
 
 
 	/**
 	 * 查询当前用户的所有借阅记录
-	 * @param userName
+	 * @param UserDTOName
 	 */
-	public synchronized void  queryUserBorrowRecord(String userName) {
+	public synchronized void  queryUserDTOBorrowRecord(String UserDTOName) {
 		System.out.println("\n"+ HEADSTAR
-				+ userName
+				+ UserDTOName
 				+" 的借阅记录 " + TAILSTAR);
-		bookService.getBorrowRecordByName(userName).forEach(System.out::println);
+		bookService.getBorrowRecordByName(UserDTOName).forEach(System.out::println);
 	}
 
 	/**
@@ -216,27 +213,27 @@ public class BookManager {
 	/**
 	 * 显示当前图书馆里所记录的所有用户信息
 	 */
-	public synchronized void displayAllUsers(){
-		LinkedList<User> users = bookService.getAllUsers();
-		if (users.size()==0)
+	public synchronized void displayAllUserDTOs(){
+		LinkedList<UserDTO> UserDTODTODTOS = bookService.getAllUserDTOs();
+		if (UserDTODTODTOS.size()==0)
 			System.out.println("目前还没有人注册呢");
 		else {
 			System.out.println("\n"+HEADSTAR+"已注册用户列表"+TAILSTAR);
-			users.forEach(System.out::println);
+			UserDTODTODTOS.forEach(System.out::println);
 		}
 	}
 
 
 	/**
 	 * 计算并且支付超出归还时间的罚金
-	 * @param userName
+	 * @param UserDTOName
 	 * @return
-	 * @throws UserNotLoginException
+	 * @throws UserDTONotLoginException
 	 */
-	public boolean payBookCost(String userName) throws UserNotLoginException {
-		User user = getCurrentUser(userName);
-		synchronized (user) {
-			return bookService.payBookCost(user);
+	public boolean payBookCost(String UserDTOName) throws UserDTONotLoginException {
+		UserDTO UserDTODTO = getCurrentUserDTO(UserDTOName);
+		synchronized (UserDTODTO) {
+			return bookService.payBookCost(UserDTODTO);
 		}
 	}
 
@@ -245,20 +242,20 @@ public class BookManager {
 	 * @return
 	 */
 	public synchronized boolean isAnyBodyElse(){
-		return bookService.getAllUsers().size() > 0;
+		return bookService.getAllUserDTOs().size() > 0;
 	}
 
 
 	/**
 	 * 判读指定用户是否已经注册
-	 * 通过user_Name的unique索引进行判断
-	 * @param userName
+	 * 通过UserDTO_Name的unique索引进行判断
+	 * @param UserDTOName
 	 * @return
 	 */
-	public synchronized boolean isUserExist(String userName){
+	public synchronized boolean isUserDTOExist(String UserDTOName){
 		try {
-			return (bookService.getUserByName(userName) != null);
-		} catch (UserNotFoundException userNotFoundException) {
+			return (bookService.getUserDTOByName(UserDTOName) != null);
+		} catch (UserDTONotFoundException UserDTONotFoundException) {
 			return false;
 		}
 	}
@@ -301,31 +298,31 @@ public class BookManager {
 		bookService.getBooksByBookName(bookName).stream().forEach(System.out::println);
 	}
 	//查询用户信息
-	public void queryUser(String userName) throws UserNotFoundException {
-		System.out.println(bookService.getUserByName(userName));
+	public void queryUserDTO(String UserDTOName) throws UserDTONotFoundException {
+		System.out.println(bookService.getUserDTOByName(UserDTOName));
 	}
 
-	public void currentBorrowTest(String userName, int bookId){
+	public void currentBorrowTest(String UserDTOName, int bookId){
 		try {
-			if (borrowBook(userName, String.valueOf(bookId)))
-				System.out.println(userName
+			if (borrowBook(UserDTOName, String.valueOf(bookId)))
+				System.out.println(UserDTOName
 						+ "借阅了《"
 						+ queryBookNameByBookId(String.valueOf(bookId))
 						+ "》\n");
 			bookManager.displayAllBooks();
 			Thread.sleep(1000);
-		} catch (UserNotLoginException | InterruptedException e) {
+		} catch (UserDTONotLoginException | InterruptedException e) {
 		}
 	}
-	public void currentReturnTest(String userName, int bookId){
+	public void currentReturnTest(String UserDTOName, int bookId){
 		String returnBookId = String.valueOf(bookId);
 		try {
-			if (returnBook(userName, returnBookId)) {
-				System.out.println(userName + "归还了" + returnBookId +"\n");
-				payBookCost(userName);
+			if (returnBook(UserDTOName, returnBookId)) {
+				System.out.println(UserDTOName + "归还了" + returnBookId +"\n");
+				payBookCost(UserDTOName);
 				Thread.sleep(1000);
 			}
-		} catch (UserNotLoginException | InterruptedException e) {
+		} catch (UserDTONotLoginException | InterruptedException e) {
 		}
 	}
 
@@ -334,9 +331,9 @@ public class BookManager {
 
 		Runnable runnable1 = () -> {
 			try {
-				bookManager.loginUser("吴肖琪");
-			} catch (UserNotFoundException userNotFoundException) {
-				Logger.getGlobal().info(userNotFoundException.getMessage());
+				bookManager.loginUserDTO("吴肖琪");
+			} catch (UserDTONotFoundException UserDTONotFoundException) {
+				Logger.getGlobal().info(UserDTONotFoundException.getMessage());
 			}
 			//int count = (int) (10 * Math.random());
 			for (int i =0 ; i<5;i++) {
@@ -346,9 +343,9 @@ public class BookManager {
 		};
 		Runnable runnable2 = () -> {
 			try {
-				bookManager.loginUser("whoever");
-			} catch (UserNotFoundException userNotFoundException) {
-				Logger.getGlobal().info(userNotFoundException.getMessage());
+				bookManager.loginUserDTO("whoever");
+			} catch (UserDTONotFoundException UserDTONotFoundException) {
+				Logger.getGlobal().info(UserDTONotFoundException.getMessage());
 			}
 			//int count = new Random(9).nextInt(5);
 			for (int i =0 ; i<5;i++) {
@@ -365,9 +362,9 @@ public class BookManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		bookManager.currentUsers.forEach((k,v) ->
+		bookManager.currentUserDTOs.forEach((k,v) ->
 				System.out.println(k+ " " + v));
-		bookManager.displayAllUsers();
+		bookManager.displayAllUserDTOs();
 	}
 
 

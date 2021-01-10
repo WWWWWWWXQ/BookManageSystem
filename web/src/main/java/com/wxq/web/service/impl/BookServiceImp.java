@@ -6,23 +6,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.wxq.web.dao.po.BookDao;
-import com.wxq.web.entity.Book;
+import com.wxq.web.dao.BookDao;
 import com.wxq.web.entity.BorrowRecord;
-import com.wxq.web.entity.User;
 import com.wxq.web.exception.BookNotFoundException;
 import com.wxq.web.exception.BookNotInstoreException;
 import com.wxq.web.exception.SQLUpdateException;
 import com.wxq.web.exception.UserMaxBorrowedException;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.exception.UserOweFeeException;
-import com.wxq.web.service.BookService;
 
 
 /**
  * 逻辑处理层
  */
-public class BookServiceImp implements BookService {
+public class BookServiceImp  {
 	private BookDao bookDao;
 	private ConnectPool connectPool = new ConnectPool();
 
@@ -49,7 +46,7 @@ public class BookServiceImp implements BookService {
 	 * @param books
 	 * @return
 	 */
-	@Override
+
 	public boolean addBooks(List<Book> books) {
 		Connection conn = connectPool.getConnection();
 		try {
@@ -74,7 +71,7 @@ public class BookServiceImp implements BookService {
 	 * @param user
 	 * @return
 	 */
-	@Override
+
 	public boolean addUser(User user) {
 		Connection conn = connectPool.getConnection();
 		try {
@@ -98,7 +95,7 @@ public class BookServiceImp implements BookService {
 	 * @param userName
 	 * @return
 	 */
-	@Override
+
 	public List<BorrowRecord> getBorrowRecordByName(String userName) {
 		Connection conn = null;
 		try {
@@ -111,14 +108,14 @@ public class BookServiceImp implements BookService {
 	}
 
 
-	@Override
+
 	public synchronized LinkedList<Book> getAllBooks() {
 		Connection conn = connectPool.getConnection();
 		return bookDao.getAllBooks(conn);
 
 	}
 
-	@Override
+
 	public synchronized LinkedList<User> getAllUsers() {
 		Connection conn = connectPool.getConnection();
 
@@ -126,7 +123,7 @@ public class BookServiceImp implements BookService {
 
 	}
 
-	@Override
+
 	public String getUserTypeByName(String userName) {
 		Connection conn = connectPool.getConnection();
 		try {
@@ -138,7 +135,7 @@ public class BookServiceImp implements BookService {
 	}
 
 	//查询用户  抛出无此用户异常
-	 @Override
+
 	public User getUserByName(String userName) throws UserNotFoundException {
 		Connection conn = connectPool.getConnection();
 		User user;
@@ -151,7 +148,7 @@ public class BookServiceImp implements BookService {
 		}
 	}
 
-	@Override
+
 	public String getBookNameByBookId(String bookId) {
 		Connection conn = connectPool.getConnection();
 		String bookName = null;
@@ -165,7 +162,7 @@ public class BookServiceImp implements BookService {
 
 
 	//按书名查询图书
-	@Override
+
 	public List<Book> getBooksByBookName(String bookName) {
 		Connection conn = connectPool.getConnection();
 		List<Book> list = bookDao.getBooksByBookName(conn, bookName);
@@ -178,9 +175,9 @@ public class BookServiceImp implements BookService {
 	 * 有欠费不能借书，需先调用paybookCost方法还清欠款 达到最大借书量不能借书 更新图书表中的borrower与is_instore属性 更新借阅表
 	 * 更新用户表中的book_num属性+1 数据库操作中发生异常时，进行回滚rollback（）
 	 * 
-	 * @see BookService#borrowBook(User, String)
+	 * @see
 	 */
-	@Override
+
 	public synchronized boolean borrowBook(User user, String bookId) {
 		Connection conn = null;
 		try {
@@ -241,7 +238,7 @@ public class BookServiceImp implements BookService {
 	 * @param bookId
 	 * @return
 	 */
-	@Override
+
 	public synchronized boolean returnBook(User user, String bookId) {
 		Connection conn = null;
 		try {
@@ -286,7 +283,7 @@ public class BookServiceImp implements BookService {
 	}
 
 
-	@Override
+
 	public synchronized boolean payBookCost(User user) {
 		Connection conn = connectPool.getConnection();
 		try {
@@ -308,7 +305,7 @@ public class BookServiceImp implements BookService {
 		}
 	}
 
-	@Override
+
 	public boolean isInitialized(List<Book> books, Book book) {
 		Connection conn = connectPool.getConnection();
 		if (books.contains(book)){
@@ -344,7 +341,7 @@ public class BookServiceImp implements BookService {
 	/*
 	没时间写了 放在最后面
 	 */
-	@Override
+
 	public boolean deleteBook(String bookId) {
 		Connection conn = connectPool.getConnection();
 		bookDao.deleteBookByBookId(conn,bookId);
@@ -352,7 +349,7 @@ public class BookServiceImp implements BookService {
 		return false;
 	}
 
-	@Override
+
 	public synchronized boolean addBook(Book book) {
 		Connection conn = connectPool.getConnection();
 		try {

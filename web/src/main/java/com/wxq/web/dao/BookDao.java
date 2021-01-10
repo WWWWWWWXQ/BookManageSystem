@@ -1,4 +1,4 @@
-package com.wxq.web.dao.po;
+package com.wxq.web.dao;
 
 import java.sql.*;
 import java.time.Duration;
@@ -7,10 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.wxq.web.constant.ConstantValue;
-import com.wxq.web.entity.Book;
-import com.wxq.web.entity.BorrowRecord;
-import com.wxq.web.entity.User;
 import com.wxq.web.exception.BookNotFoundException;
 import com.wxq.web.exception.SQLUpdateException;
 import com.wxq.web.exception.UserNotFoundException;
