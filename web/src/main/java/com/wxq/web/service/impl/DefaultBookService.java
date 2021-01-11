@@ -4,12 +4,14 @@ import com.wxq.web.controller.vo.BookVO;
 import com.wxq.web.dao.BookRepository;
 import com.wxq.web.dao.po.Book;
 import com.wxq.web.dao.po.User;
+import com.wxq.web.exception.BookNotFoundException;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.BookService;
 import com.wxq.web.service.dto.BookDTO;
 import com.wxq.web.service.dto.BorrowRecordDTO;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +42,8 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public boolean deleteBook(String bookId) {
-        return false;
+    public void deleteBook(Long bookId) {
+        bookRepository.deleteById(bookId);
     }
 
     @Override
@@ -75,11 +77,6 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public boolean isInitialized(List<BookDTO> books, BookDTO book) {
-        return false;
-    }
-
-    @Override
     public LinkedList<BookDTO> getAllBooks() {
         return null;
     }
@@ -102,5 +99,15 @@ public class DefaultBookService implements BookService {
     @Override
     public List<BookVO> findAll() {
          return null;
+    }
+
+    @Override
+    public BookDTO findByBookId(Long bookId) {
+        Book book = bookRepository.findById(bookId).get();
+        if (book == null)
+            throw new RuntimeException();
+        BookDTO bookDTO = new BookDTO();
+        BeanUtils.copyProperties(book, bookDTO);
+        return bookDTO;
     }
 }

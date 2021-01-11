@@ -17,7 +17,7 @@ public interface BookService {
 
 	List<BookDTO> getBooksByBookName(String bookName);
 	
-	boolean deleteBook(String bookId);
+	void deleteBook(Long bookId);
 
 	boolean addBook(BookDTO book);
 
@@ -31,8 +31,6 @@ public interface BookService {
 	
 	boolean payBookCost(User userDTO);
 
-	boolean isInitialized(List<BookDTO> books, BookDTO book);
-
 	LinkedList<BookDTO> getAllBooks();
 
 	LinkedList<User> getAllUsers();
@@ -42,4 +40,6 @@ public interface BookService {
 	String getBookNameByBookId(String bookId);
 
     List<BookVO> findAll();
+
+	BookDTO findByBookId(Long bookId);
 }
