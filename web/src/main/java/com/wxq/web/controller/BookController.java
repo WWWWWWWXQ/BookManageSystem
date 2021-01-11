@@ -26,12 +26,12 @@ public class BookController {
         return "hello";
     }
 
-    @RequestMapping("books")
+    @RequestMapping(value = "/books")
     public List<BookVO> books(){
         return bookService.findAll();
     }
 
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public void delete(@RequestParam("id") Long bookId){
         try {
             BookDTO bookDTO = bookService.findByBookId(bookId);
