@@ -1,19 +1,28 @@
 package com.wxq.web.service.impl;
 
+import com.wxq.web.controller.vo.BookVO;
+import com.wxq.web.dao.BookRepository;
+import com.wxq.web.dao.po.Book;
 import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.BookService;
 import com.wxq.web.service.dto.BookDTO;
 import com.wxq.web.service.dto.BorrowRecordDTO;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
 @Service
 public class DefaultBookService implements BookService {
+
+    @Autowired
+    BookRepository bookRepository;
 
     @Override
     public boolean returnBook(User userDTO, String bookId) {
@@ -88,5 +97,10 @@ public class DefaultBookService implements BookService {
     @Override
     public String getBookNameByBookId(String bookId) {
         return null;
+    }
+
+    @Override
+    public List<BookVO> findAll() {
+         return null;
     }
 }

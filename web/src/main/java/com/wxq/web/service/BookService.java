@@ -3,6 +3,7 @@ package com.wxq.web.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.wxq.web.controller.vo.BookVO;
 import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.dto.BookDTO;
@@ -39,4 +40,6 @@ public interface BookService {
 	String getUserTypeByName(String userName);
 
 	String getBookNameByBookId(String bookId);
+
+    List<BookVO> findAll();
 }
