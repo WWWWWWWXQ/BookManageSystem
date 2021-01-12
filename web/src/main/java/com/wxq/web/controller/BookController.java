@@ -5,12 +5,14 @@ import com.wxq.web.exception.BookNotFoundException;
 import com.wxq.web.service.BookService;
 import com.wxq.web.service.dto.BookDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -26,9 +28,16 @@ public class BookController {
         return "hello";
     }
 
-    @RequestMapping(value = "/books")
+    @RequestMapping(value = "/query")
     public List<BookVO> books(){
-        return bookService.findAll();
+        List<BookDTO> booksDTOs = bookService.findAll();
+        List<BookVO> books = new LinkedList<>();
+        for (BookDTO bookDTO: booksDTOs){
+            BookVO bookVO = new BookVO();
+            BeanUtils.copyProperties(bookDTO, bookVO);
+            books.add(bookVO);
+        }
+        return books;
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)

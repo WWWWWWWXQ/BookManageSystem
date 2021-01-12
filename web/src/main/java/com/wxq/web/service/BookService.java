@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.wxq.web.controller.vo.BookVO;
+import com.wxq.web.dao.po.Book;
 import com.wxq.web.dao.po.User;
 import com.wxq.web.exception.UserNotFoundException;
 import com.wxq.web.service.dto.BookDTO;
@@ -15,31 +16,31 @@ public interface BookService {
 
  	boolean borrowBook(User userDTO, String bookId);
 
-	List<BookDTO> getBooksByBookName(String bookName);
+//	List<BookDTO> getBooksByBookName(String bookName);
 	
 	void deleteBook(Long bookId);
 
-	boolean addBook(BookDTO book);
+//	boolean addBook(BookDTO book);
 
-	boolean addBooks(List<BookDTO> list);
+//	boolean addBooks(List<BookDTO> list);
 
-	List<BorrowRecordDTO> getBorrowRecordByName(String userName);
+//	List<BorrowRecordDTO> getBorrowRecordByName(String userName);
 
-	User getUserByName(String userName)throws UserNotFoundException;
+//	User getUserByName(String userName)throws UserNotFoundException;
+//
+//	boolean addUser(User userDTO);
+//
+//	boolean payBookCost(User userDTO);
 
-	boolean addUser(User userDTO);
-	
-	boolean payBookCost(User userDTO);
+//	LinkedList<BookDTO> getAllBooks();
 
-	LinkedList<BookDTO> getAllBooks();
+//	LinkedList<User> getAllUsers();
 
-	LinkedList<User> getAllUsers();
+//	String getUserTypeByName(String userName);
 
-	String getUserTypeByName(String userName);
+//	String getBookNameByBookId(String bookId);
 
-	String getBookNameByBookId(String bookId);
-
-    List<BookVO> findAll();
+    List<BookDTO> findAll();
 
 	BookDTO findByBookId(Long bookId);
 }
