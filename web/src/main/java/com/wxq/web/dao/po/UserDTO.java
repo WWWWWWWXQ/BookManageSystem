@@ -11,16 +11,16 @@ import javax.persistence.Entity;
 
 @Data
 @Entity
-public class User extends BasePO{
+public class UserDTO extends BasePO{
 
-    private String userName;
+    private java.lang.String userName;
     //用户类型 学生为stu，教师为tea
-    private String role;
+    private java.lang.String role;
     //当前借阅数量（未还）
     private int borrowNum;
     //欠费总额
     private double costAmount;
 
-    private String gender;
+    private java.lang.String gender;
 
 }

@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 public class BookDTO {
-    private Long bookId;
+    private Long Id;
     private String bookName;
     private String author;
     private String publishHouse;

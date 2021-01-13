@@ -2,11 +2,9 @@ package com.wxq.web.service.impl;
 
 import com.wxq.web.dao.BookRepository;
 import com.wxq.web.dao.po.Book;
-import com.wxq.web.dao.po.User;
-import com.wxq.web.exception.UserNotFoundException;
+import com.wxq.web.dao.po.UserDTO;
 import com.wxq.web.service.BookService;
 import com.wxq.web.service.dto.BookDTO;
-import com.wxq.web.service.dto.BorrowRecordDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,82 +21,54 @@ public class DefaultBookService implements BookService {
     BookRepository bookRepository;
 
     @Override
-    public boolean returnBook(User userDTO, String bookId) {
-        return false;
+    public boolean returnBook(UserDTO userDTO, Long bookId) {
+        Book book = bookRepository.findById(bookId).get();
+        if (! book.getBorrower().equals(userDTO.getUserName())){
+            log.info("The borrower of book 《{}》 is not {}", book.getBookName(), userDTO.getUserName());
+            return false;
+        }
+        book.setBorrower("null");
+        book.setInStore(true);
+        return true;
     }
 
     @Override
-    public boolean borrowBook(User userDTO, String bookId) {
-        return false;
+    public boolean borrowBook(UserDTO userDTO, Long bookId) {
+        Book book = bookRepository.findById(bookId).get();
+        if (!book.isInStore()){
+            log.info("Book [{}] has been borrowed", bookId);
+            return false;
+        }
+        book.setBorrower(userDTO.getUserName());
+        book.setInStore(false);
+        bookRepository.save(book);
+        return true;
     }
-
-//    @Override
-//    public List<BookDTO> getBooksByBookName(String bookName) {
-//        return null;
-//    }
 
     @Override
     public void deleteBook(Long bookId) {
         bookRepository.deleteById(bookId);
     }
 
-//    @Override
-//    public boolean addBook(BookDTO book) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean addBooks(List<BookDTO> list) {
-//        return false;
-//    }
-//
-//    @Override
-//    public List<BorrowRecordDTO> getBorrowRecordByName(String userName) {
-//        return null;
-//    }
-//
-//    @Override
-//    public User getUserByName(String userName) throws UserNotFoundException {
-//        return null;
-//    }
-
-//    @Override
-//    public boolean addUser(User userDTO) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean payBookCost(User userDTO) {
-//        return false;
-//    }
-//
-//    @Override
-//    public LinkedList<BookDTO> getAllBooks() {
-//        return null;
-//    }
-//
-//    @Override
-//    public LinkedList<User> getAllUsers() {
-//        return null;
-//    }
-//
-//    @Override
-//    public String getUserTypeByName(String userName) {
-//        return null;
-//    }
-//
-//    @Override
-//    public String getBookNameByBookId(String bookId) {
-//        return null;
-//    }
+    @Override
+    public void addBooks(List<BookDTO> list) {
+        List<Book> books = new LinkedList<>();
+        for (BookDTO bookDTO : list) {
+            Book book = new Book();
+            BeanUtils.copyProperties(bookDTO, book);
+            book.setId(null);
+            books.add(book);
+        }
+        bookRepository.saveAll(books);
+    }
 
     @Override
     public List<BookDTO> findAll() {
-        Iterable<Book> books = bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
         List<BookDTO> bookDTOS = new LinkedList<>();
-        while (books.iterator().hasNext()){
+        for (Book book : books) {
             BookDTO bookDTO = new BookDTO();
-            BeanUtils.copyProperties(books.iterator(), bookDTO);
+            BeanUtils.copyProperties(book, bookDTO);
             bookDTOS.add(bookDTO);
         }
         return bookDTOS;
@@ -107,8 +77,7 @@ public class DefaultBookService implements BookService {
     @Override
     public BookDTO findByBookId(Long bookId) {
         Book book = bookRepository.findById(bookId).get();
-        if (book == null)
-            throw new RuntimeException();
+        if (book == null) throw new RuntimeException();
         BookDTO bookDTO = new BookDTO();
         BeanUtils.copyProperties(book, bookDTO);
         return bookDTO;
