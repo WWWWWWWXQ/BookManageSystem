@@ -168,7 +168,7 @@ public class BookManager {
 	 */
 	public synchronized boolean borrowBook(String UserDTOName, String bookId) throws UserDTONotLoginException {
 		UserDTO UserDTODTO = getCurrentUserDTO(UserDTOName);
-		return bookService.borrowBook(UserDTODTO, bookId);
+		return bookService.borrowBook(UserDT, bookId);
 	}
 
 	/**
